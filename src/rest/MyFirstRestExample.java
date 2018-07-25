@@ -1,10 +1,9 @@
 package rest;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by andriusbaltrunas on 7/24/2018.
@@ -34,8 +33,29 @@ public class MyFirstRestExample {
     @Path("/getStudent")
     @Produces(MediaType.APPLICATION_JSON)
     public Student getStudent(){
-        Student st = new Student(10, "Andrius", "Baltruna", "andrius@test.com");
+        Student st = new Student(10, "Andrius", "Baltrunas", "andrius@test.com");
         return st;
     }
 
+    @GET
+    @Path("/getStudents")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Student> getStudents(){
+        List<Student> students = new ArrayList<>();
+        students.add(new Student(12, "Andrius", "Baltrunas", "abaltrunas@kcs.com"));
+        students.add(new Student(33, "Jonas", "Jonukas", "jonukas@kcs.com"));
+        return students;
+    }
+
+    @POST
+    @Path("/saveStudent")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Student save(Student student){
+        student.setId(11);
+        student.setName(student.getName() + "!!!!");
+        student.setSurname(student.getSurname() + "!!!!!");
+        student.setEmail(student.getEmail() + "!!!!!");
+        return student;
+    }
 }
