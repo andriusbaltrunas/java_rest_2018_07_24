@@ -23,17 +23,17 @@ public class MySecondRest {
     @GET
     @Path("/students")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Student> getStudents(){
+    public List<Student> getStudents() {
         List<Student> students = new ArrayList<>();
         DbUtils dbUtils = new DbUtils();
         Connection connection = dbUtils.createConnection();
 
-        if(connection != null){
+        if (connection != null) {
             try {
                 Statement statement = connection.createStatement();
 
                 ResultSet resultSet = statement.executeQuery("SELECT * FROM students");
-                while (resultSet.next()){
+                while (resultSet.next()) {
                     students.add(new Student(resultSet.getInt("id"), resultSet.getString("name"),
                             resultSet.getString("surname"), resultSet.getString("email"), resultSet.getString("phone")));
                 }
@@ -48,7 +48,21 @@ public class MySecondRest {
     @GET
     @Path("/{id}/student")
     @Produces(MediaType.APPLICATION_JSON)
-    public Student getStudent(@PathParam("id") int id){
-
+    public Student getStudent(@PathParam("id") int id) {
+        DbUtils dbUtils = new DbUtils();
+        Connection connection = dbUtils.createConnection();
+        Student student = null;
+        if (connection != null) {
+            try {
+                Statement st = connection.createStatement();
+                ResultSet resultSet = st.executeQuery("SELECT + FROM students where id=" + id);
+                resultSet.next();
+                student = new Student(resultSet.getInt("id"), resultSet.getString("name"),
+                        resultSet.getString("surname"), resultSet.getString("email"), resultSet.getString("phone"));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return student;
     }
 }
